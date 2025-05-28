@@ -43,7 +43,7 @@ Payment Method: ${params.get('payment_method')}
 
   try {
     await transporter.sendMail(mailOptions);
-    res.writeHead(302, { Location: `/thankyou.html?booking_id=${bookingId}` });
+    res.writeHead(302, { Location: `/thank-you.html?booking_id=${bookingId}` });
     res.end();
   } catch (error) {
     res.status(500).send("Failed to send email: " + error.message);
