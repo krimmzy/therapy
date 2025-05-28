@@ -1,27 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Thank You</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank You – Gracey Therapy</title>
   <style>
-    body { font-family: Arial; padding: 20px; }
-    button { margin-top: 10px; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #28a745;
+      margin-bottom: 10px;
+    }
+
+    .booking-id {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+
+    button.copy-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+
+    button.copy-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .social-links {
+      margin-top: 30px;
+    }
+
+    .social-links a {
+      display: inline-block;
+      margin: 10px;
+      text-decoration: none;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 5px;
+      font-size: 15px;
+    }
+
+    .whatsapp { background-color: #25d366; }
+    .telegram { background-color: #0088cc; }
+    .signal   { background-color: #3a76f0; }
+    .zangi    { background-color: #292929; }
+
+    .back-home {
+      margin-top: 30px;
+      display: inline-block;
+      text-decoration: none;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .back-home:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <h2>Submission Successful!</h2>
-  <p>Your booking ID is: <strong id="bookingId"></strong></p>
-  <button onclick="copyText()">Copy Info</button>
+  <h2>✅ Booking Submitted!</h2>
+  <p class="booking-id">Your Booking ID is: <strong id="bookingId"></strong></p>
+  <button class="copy-btn" onclick="copyInfo()">📋 Copy Booking Info</button>
+
+  <div class="social-links">
+    <p>Send your booking ID via:</p>
+    <a id="whatsappLink" class="whatsapp" target="_blank">WhatsApp</a>
+    <a id="telegramLink" class="telegram" target="_blank">Telegram</a>
+    <a id="signalLink" class="signal" target="_blank">Signal</a>
+    <a id="zangiLink" class="zangi" target="_blank">Zangi</a>
+  </div>
+
+  <a class="back-home" href="/">← Back to Homepage</a>
 
   <script>
-    const bookingId = new URLSearchParams(window.location.search).get("booking_id");
+    const params = new URLSearchParams(window.location.search);
+    const bookingId = params.get("booking_id") || "Unavailable";
     document.getElementById("bookingId").innerText = bookingId;
 
-    function copyText() {
-      const text = `Your booking ID: ${bookingId}`;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("Copied to clipboard!");
+    const message = `Hello Gracey, I just made a booking. My booking ID is: ${bookingId}`;
+
+    // Encode message for URLs
+    const encoded = encodeURIComponent(message);
+
+    // Set links with encoded booking message
+    document.getElementById("whatsappLink").href = `https://wa.me/19282019545?text=${encoded}`;
+    document.getElementById("telegramLink").href = `https://t.me/Graceytherapy?text=${encoded}`;
+    document.getElementById("signalLink").href = `https://signal.me/#p/+19282019545?text=${encoded}`;
+    document.getElementById("zangiLink").href = `https://zangi.com/share?text=${encoded}&to=10-8926-7524`;
+
+    function copyInfo() {
+      navigator.clipboard.writeText(message).then(() => {
+        alert("Booking info copied to clipboard!");
       });
     }
   </script>
 </body>
-</html>
+  </html>
