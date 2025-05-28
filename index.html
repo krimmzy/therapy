@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gracey Therapy</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- Header with Navbar -->
+<header>
+  <div class="container">
+    <div class="logo">Gracey Therapy</div>
+    <nav>
+      <div class="menu-toggle" id="mobile-menu">&#9776;</div>
+      <ul class="nav-list" id="nav-list">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">Services</a>
+          <ul class="dropdown-menu">
+            <li><a href="#signature">Signature</a></li>
+            <li><a href="#erotic">Erotic</a></li>
+            <li><a href="#couples">Couples</a></li>
+          </ul>
+        </li>
+
+        <li><a href="#book">Book Now</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-overlay">
+      <h1>Touch That Transcends</h1>
+      <p>Gracefully guiding you into peace, pleasure, and intimate presence.</p>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="about">
+    <h2>About Gracey</h2>
+    <p>I’m a 40-year-old independent masseuse—experienced, intuitive, and passionate about the art of intimate connection. My hands speak a quiet language of care and desire, inviting you to leave the world behind and simply feel.</p>
+    <p>Each session is more than just massage—it’s a tender escape. Whether you seek closeness, release, or serenity, I create a moment just for you—with heart, grace, and complete discretion.</p>
+    <blockquote>Let me be your romantic hideaway… where touch tells a story, and every breath brings you closer to peace and pleasure.</blockquote>
+    <p class="disclaimer">*Please do not message if you are under 40.</p>
+  </section>
+
+  <!-- Services Section -->
+  <section id="services" class="services">
+    <h2>Signature Experiences</h2>
+    <div class="service-cards">
+      <div class="card">
+        <h3>The Velvet Touch</h3>
+        <p>Gentle, flowing strokes lull you into serenity. Perfect for first-timers or those craving soothing sensuality.</p>
+      </div>
+      <div class="card">
+        <h3>Deep Surrender</h3>
+        <p>Firm, therapeutic touch that releases deep tension and invites full-body relaxation.</p>
+      </div>
+      <div class="card">
+        <h3>Skin to Sin</h3>
+        <p>Body-to-body sensual massage. Gliding skin, shared breath, intimate energy awaken every nerve.</p>
+      </div>
+      <div class="card">
+        <h3>The Release Ritual</h3>
+        <p>A unique milking table experience—hands-free, full-body pleasure like nothing else.</p>
+      </div>
+    </div>
+
+    <h2>Erotic Enhancements</h2>
+    <div class="service-cards">
+      <div class="card">
+        <h3>Pleasure Unveiled</h3>
+        <p>Tailored happy endings guided with intuitive care.</p>
+      </div>
+      <div class="card">
+        <h3>Mutual Desire</h3>
+        <p>Mutual touch and erotic tension as part of your journey.</p>
+      </div>
+    </div>
+
+    <h2>Couples & Themed Journeys</h2>
+    <div class="service-cards">
+      <div class="card">
+        <h3>The Lovers’ Retreat</h3>
+        <p>Explore and indulge together—side by side.</p>
+      </div>
+      <div class="card">
+        <h3>Goddess Worship</h3>
+        <p>Honor the feminine with praise and submission.</p>
+      </div>
+      <div class="card">
+        <h3>Tie & Tease</h3>
+        <p>Light restraint, blindfolds, and teasing touch in full trust.</p>
+      </div>
+      <div class="card">
+        <h3>Sacred Temptation</h3>
+        <p>Tantric-inspired, spiritual connection through touch.</p>
+      </div>
+    </div>
+
+    <p class="note">NOTE: If you’ve never tried the milking table, you have to experience it—it’s next-level pleasure. (40+ only)</p>
+  </section>
+
+  
+<section id="book" class="booking-section">
+  <h2>Request a Session</h2>
+  <form action="/api/send" method="POST" class="booking-form">
+    <label>What time would you like to book for?</label>
+    <input type="time" name="booking_time" required>
+
+    <label>Incall or Outcall?</label>
+    <select name="location_type" required>
+      <option value="">Select one</option>
+      <option value="incall">Incall</option>
+      <option value="outcall">Outcall</option>
+    </select>
+
+    <label>Massage type:</label>
+    <select name="massage_type" required>
+      <option value="">Select one</option>
+      <option value="massage_only">Massage Only</option>
+      <option value="happy_ending">Massage with Happy Ending</option>
+    </select>
+
+    <label>Client location:</label>
+    <input type="text" name="client_location" required>
+
+    <label>Preferred name to be called:</label>
+    <input type="text" name="preferred_name" required>
+
+    <label>If outcall, meeting point:</label>
+    <input type="text" name="meeting_point">
+
+    <label>Affiliated with any law enforcement?</label>
+    <select name="law_enforcement" required>
+      <option value="">Select one</option>
+      <option value="no">No</option>
+      <option value="yes">Yes</option>
+    </select>
+
+    <label>Any transmittable disease?</label>
+    <select name="disease" required>
+      <option value="">Select one</option>
+      <option value="no">No</option>
+      <option value="yes">Yes</option>
+    </select>
+
+    <label>Payment Method:</label>
+    <select name="payment_method" required>
+      <option value="">Select one</option>
+      <option value="gift_card">Gift Card</option>
+      <option value="venmo">Venmo</option>
+      <option value="cash_app">Cash App</option>
+      <option value="btc">Bitcoin (BTC)</option>
+    </select>
+
+    <button type="submit">Submit Request</button>
+  </form>
+</section>
+  
+    
+
+  <!-- Contact / Book Now Section -->
+  <section id="contact" class="contact">
+    <h2>Book Now / Message Me</h2>
+    <p>You can book or message me directly via any of these secure platforms. No drama. Just 100% real, independent satisfaction.</p>
+    <div class="contact-buttons">
+      <a href="https://wa.me/19282019545" target="_blank" class="btn">WhatsApp</a>
+      <a href="https://signal.me/#p/+19282019545" target="_blank" class="btn">Signal</a>
+       <a class="btn" href="#" onclick="alert('Zangi ID: 10-8926-7524')">Zangi</a>
+      <a href="https://t.me/Graceytherapy" target="_blank" class="btn">Telegram</a>
+    </div>
+    <p class="disclaimer">*For clients aged 40 and above only. Serious inquiries only.</p>
+  </section>
+
+  <footer class="footer">
+    <p>&copy; 2025 Gracey Therapy. All rights reserved.</p>
+  </footer>
+  
+  <script>
+  const menuToggle = document.getElementById('mobile-menu');
+  const navList = document.getElementById('nav-list');
+  const dropdownToggle = document.querySelector('.dropdown-toggle');
+  const dropdownMenu = document.querySelector('.dropdown-menu');
+
+  // Toggle the main nav menu
+  menuToggle.addEventListener('click', () => {
+    navList.classList.toggle('show');
+  });
+
+  // Toggle dropdown inside mobile nav
+  dropdownToggle.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768) {
+      e.preventDefault();
+      dropdownMenu.classList.toggle('show-dropdown');
+    }
+  });
+
+  // Close nav menu when link is clicked (optional)
+  document.querySelectorAll('.nav-list a').forEach(link => {
+    link.addEventListener('click', () => {
+      navList.classList.remove('show');
+      dropdownMenu.classList.remove('show-dropdown');
+    });
+  });
+
+  document.getElementById("bookingForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+
+    const response = await fetch("/api/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+
+    if (response.redirected) {
+      window.location.href = response.url;
+    }
+  });
+</script>
+
+</body>
+
+</html>

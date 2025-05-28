@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Thank You</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    button { margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Submission Successful!</h2>
+  <p>Your booking ID is: <strong id="bookingId"></strong></p>
+  <button onclick="copyText()">Copy Info</button>
+
+  <script>
+    const bookingId = new URLSearchParams(window.location.search).get("booking_id");
+    document.getElementById("bookingId").innerText = bookingId;
+
+    function copyText() {
+      const text = `Your booking ID: ${bookingId}`;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Copied to clipboard!");
+      });
+    }
+  </script>
+</body>
+</html>
