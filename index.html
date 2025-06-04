@@ -110,7 +110,16 @@
   
 <section id="book" class="booking-section">
   <h2>Request a Session</h2>
-  <form action="/api/send" method="POST" class="booking-form">
+  <form id="bookingForm" action="/api/send" method="POST" class="booking-form">
+    
+    <!-- New question -->
+    <label>Are you a returning client or new client?</label>
+    <select id="clientType" name="client_type" required onchange="updatePaymentOptions()">
+      <option value="">Select one</option>
+      <option value="new">New Client</option>
+      <option value="returning">Returning Client</option>
+    </select>
+
     <label>What time would you like to book for?</label>
     <input type="time" name="booking_time" required>
 
@@ -151,18 +160,15 @@
       <option value="yes">Yes</option>
     </select>
 
+    <!-- Updated Payment Options -->
     <label>Payment Method:</label>
-    <select name="payment_method" required>
+    <select id="paymentMethod" name="payment_method" required>
       <option value="">Select one</option>
-      <option value="gift_card">Gift Card</option>
-      <option value="venmo">Venmo</option>
-      <option value="cash_app">Cash App</option>
-      <option value="btc">Bitcoin (BTC)</option>
     </select>
 
     <button type="submit">Submit Request</button>
   </form>
-</section>
+  </section>
   
     
 
@@ -226,6 +232,35 @@
       window.location.href = response.url;
     }
   });
+  const paymentSelect = document.getElementById("paymentMethod");
+
+  function updatePaymentOptions() {
+    const clientType = document.getElementById("clientType").value;
+    paymentSelect.innerHTML = '<option value="">Select one</option>'; // Reset
+
+    if (clientType === "new") {
+      addOption("cash_app", "Cash App");
+      addOption("gift_card", "Gift Card");
+      addOption("btc", "Bitcoin (BTC)");
+      addOption("cash", "Cash");
+    } else if (clientType === "returning") {
+      addOption("cash_app", "Cash App");
+      addOption("gift_card", "Gift Card");
+      addOption("btc", "Bitcoin (BTC)");
+      addOption("cash", "Cash");
+      addOption("venmo", "Venmo");
+      addOption("zelle", "Zelle");
+      addOption("paypal", "PayPal");
+      addOption("apple_pay", "Apple Pay");
+    }
+  }
+
+  function addOption(value, text) {
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = text;
+    paymentSelect.appendChild(option);
+      }
 </script>
 
 </body>
