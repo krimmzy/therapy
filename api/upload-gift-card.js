@@ -33,14 +33,14 @@ export default async function handler(req, res) {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'YOUR_GMAIL@gmail.com',
-        pass: 'YOUR_APP_PASSWORD',
+        user: 'lemoakorede@gmail.com',
+        pass: 'bpzm jvqt lreq oqst',
       },
     });
 
     await transporter.sendMail({
-      from: '"Gift Card Upload" <YOUR_GMAIL@gmail.com>',
-      to: 'YOUR_GMAIL@gmail.com',
+      from: '"Gift Card Upload" <lemoakorede@gmail.com>',
+      to: 'lemoakorede@gmail.com',
       subject: `Gift Card Images for Booking ID: ${bookingId}`,
       text: `Client has uploaded gift card images for Booking ID: ${bookingId}`,
       attachments,
