@@ -21,46 +21,45 @@ export default async function handler(req, res) {
       return res.status(500).send("Failed to parse form");
     }
 
-    const bookingId = fields.booking_id?.[0] || "Unknown Booking ID";
-    const frontFile = files.front_card?.[0];
-    const backFile = files.back_card?.[0];
-
-    if (!frontFile || !backFile) {
-      return res.status(400).send("Both front and back card images are required");
-    }
-
-    // Create Nodemailer transporter
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    const mailOptions = {
-      from: `"Gracey Therapy" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER, // send to yourself
-      subject: `🎁 Gift Card Upload – Booking ID: ${bookingId}`,
-      text: `Gift card images uploaded for booking ID: ${bookingId}.`,
-      attachments: [
-        {
-          filename: frontFile.originalFilename,
-          content: fs.createReadStream(frontFile.path),
-        },
-        {
-          filename: backFile.originalFilename,
-          content: fs.createReadStream(backFile.path),
-        },
-      ],
-    };
-
     try {
+      const bookingId = fields.booking_id?.[0] || "Unknown Booking ID";
+      const frontFile = files.front_card?.[0];
+      const backFile = files.back_card?.[0];
+
+      if (!frontFile || !backFile) {
+        return res.status(400).send("Both front and back card images are required");
+      }
+
+      const transporter = nodemailer.createTransport({
+        service: "Gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      const mailOptions = {
+        from: `"Gracey Therapy" <${process.env.EMAIL_USER}>`,
+        to: process.env.EMAIL_USER,
+        subject: `🎁 Gift Card Upload – Booking ID: ${bookingId}`,
+        text: `Gift card images uploaded for booking ID: ${bookingId}.`,
+        attachments: [
+          {
+            filename: frontFile.originalFilename,
+            content: fs.createReadStream(frontFile.path),
+          },
+          {
+            filename: backFile.originalFilename,
+            content: fs.createReadStream(backFile.path),
+          },
+        ],
+      };
+
       await transporter.sendMail(mailOptions);
-      res.status(200).send("Gift card uploaded and sent to Gmail.");
+      res.status(200).send("Gift card uploaded and emailed successfully.");
     } catch (error) {
-      console.error("Email send error:", error);
-      res.status(500).send("Failed to send email.");
+      console.error("Email send failed:", error);
+      res.status(500).send("Email send failed. Check Vercel logs.");
     }
   });
-  }
+                                    }
