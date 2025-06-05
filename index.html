@@ -188,7 +188,7 @@
   <footer class="footer">
     <p>&copy; 2025 Gracey Therapy. All rights reserved.</p>
   </footer>
-  
+
   <script>
   const menuToggle = document.getElementById('mobile-menu');
   const navList = document.getElementById('nav-list');
@@ -208,7 +208,7 @@
     }
   });
 
-  // Close nav menu when link is clicked (optional)
+  // Close nav menu when link is clicked
   document.querySelectorAll('.nav-list a').forEach(link => {
     link.addEventListener('click', () => {
       navList.classList.remove('show');
@@ -216,22 +216,26 @@
     });
   });
 
+  // ✅ FIXED FORM SUBMISSION TO SEND DATA CORRECTLY
   document.getElementById("bookingForm").addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
 
     const response = await fetch("/api/send", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: new URLSearchParams(formData),
     });
 
     if (response.redirected) {
       window.location.href = response.url;
     }
   });
+
+  // Payment method dropdown population
   const paymentSelect = document.getElementById("paymentMethod");
 
   function updatePaymentOptions() {
@@ -258,9 +262,9 @@
     option.value = value;
     option.textContent = text;
     paymentSelect.appendChild(option);
-      }
-</script>
-
+  }
+  </script>
+  
 </body>
 
 </html>
