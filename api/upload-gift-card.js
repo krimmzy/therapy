@@ -1,6 +1,6 @@
-import formidable from 'formidable';
-import nodemailer from 'nodemailer';
-import fs from 'fs';
+import nodemailer from "nodemailer";
+import multiparty from "multiparty";
+import fs from "fs";
 
 export const config = {
   api: {
@@ -9,43 +9,58 @@ export const config = {
 };
 
 export default async function handler(req, res) {
-  const form = new formidable.IncomingForm({ multiples: false });
+  if (req.method !== "POST") {
+    return res.status(405).send("Method Not Allowed");
+  }
+
+  const form = new multiparty.Form();
 
   form.parse(req, async (err, fields, files) => {
-    if (err) return res.status(500).json({ error: 'Form parse error' });
-
-    const bookingId = fields.booking_id || "Unknown ID";
-
-    const attachments = [];
-    if (files.front_card) {
-      attachments.push({
-        filename: `Front-${bookingId}.jpg`,
-        path: files.front_card.filepath,
-      });
-    }
-    if (files.back_card) {
-      attachments.push({
-        filename: `Back-${bookingId}.jpg`,
-        path: files.back_card.filepath,
-      });
+    if (err) {
+      console.error("Form parse error:", err);
+      return res.status(500).send("Failed to parse form");
     }
 
+    const bookingId = fields.booking_id?.[0] || "Unknown Booking ID";
+    const frontFile = files.front_card?.[0];
+    const backFile = files.back_card?.[0];
+
+    if (!frontFile || !backFile) {
+      return res.status(400).send("Both front and back card images are required");
+    }
+
+    // Create Nodemailer transporter
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "Gmail",
       auth: {
-        user: 'lemoakorede@gmail.com',
-        pass: 'bpzm jvqt lreq oqst',
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
-    await transporter.sendMail({
-      from: '"Gift Card Upload" <lemoakorede@gmail.com>',
-      to: 'lemoakorede@gmail.com',
-      subject: `Gift Card Images for Booking ID: ${bookingId}`,
-      text: `Client has uploaded gift card images for Booking ID: ${bookingId}`,
-      attachments,
-    });
+    const mailOptions = {
+      from: `"Gracey Therapy" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER, // send to yourself
+      subject: `🎁 Gift Card Upload – Booking ID: ${bookingId}`,
+      text: `Gift card images uploaded for booking ID: ${bookingId}.`,
+      attachments: [
+        {
+          filename: frontFile.originalFilename,
+          content: fs.createReadStream(frontFile.path),
+        },
+        {
+          filename: backFile.originalFilename,
+          content: fs.createReadStream(backFile.path),
+        },
+      ],
+    };
 
-    res.status(200).json({ message: 'Email sent successfully' });
+    try {
+      await transporter.sendMail(mailOptions);
+      res.status(200).send("Gift card uploaded and sent to Gmail.");
+    } catch (error) {
+      console.error("Email send error:", error);
+      res.status(500).send("Failed to send email.");
+    }
   });
-        }
+  }
